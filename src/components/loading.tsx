@@ -1,10 +1,12 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 // import React from "react";
 import styles from "../styles/modules/_landing.module.scss";
 
-export default function Landing() {
+export default function Loader() {
+  const [show, setShow] = useState(true);
+
   function splitTextIntoSpans(selector: any) {
     let elements = document.querySelectorAll(selector);
     elements.forEach((element) => {
@@ -20,6 +22,7 @@ export default function Landing() {
   }
 
   const knot = useRef<HTMLDivElement>(null);
+
   useGSAP(
     () => {
       const tl = gsap.timeline({});
@@ -112,34 +115,39 @@ export default function Landing() {
         y: 40,
         opacity: 0,
         stagger: 0.2,
+        onComplete: () => setShow(false),
       });
     },
     { scope: knot }
   ); // <-- scope is f
   return (
-    <div ref={knot} className={[styles.container].join("z-40")}>
-      <footer>
-        <p>&copy; 2024</p>
-        <p>Scroll to explore</p>
-      </footer>
-      <div className="blocks">
-        <div className="block">
-          <img src="./images/7.jpg" alt="" />
-        </div>
-      </div>
-      <div className="header z-40 block">
-        <div className="headeritem">
-          <div className="headeritemwrapper">
-            <h1>sweets Creative Production Agency</h1>
+    <div>
+      {show && (
+        <div ref={knot} className="loader">
+          {/* <footer>
+            <p>&copy; 2024</p>
+            <p>Scroll to explore</p>
+          </footer> */}
+          <div className="blocks">
+            <div className="block">
+              <img src="./images/7.jpg" alt="" />
+            </div>
+          </div>
+          <div className="header">
+            <div className="headeritem">
+              <div className="headeritemwrapper">
+                <h1>sweets Creative Production Agency</h1>
+              </div>
+            </div>
+          </div>
+          <div className="counter">
+            <p>
+              3 <br />
+              2 <br />1
+            </p>
           </div>
         </div>
-      </div>
-      <div className="counter">
-        <p>
-          3 <br />
-          2 <br />1
-        </p>
-      </div>
+      )}
     </div>
   );
 }
